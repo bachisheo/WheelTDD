@@ -31,6 +31,18 @@ namespace WheelTest
             var newGame = broadcaster.SelectNewTask();
             Assert.AreNotEqual(oldGame, newGame);
         }
-
+        
+        /// <summary>
+        /// Тест для проверки ведущим ответа игрока
+        /// </summary>
+        [TestMethod]
+        public void TestCheckUserAnswer()
+        {
+            var broadcaster = new Broadcaster();
+            broadcaster.SelectNewTask();
+            var task = broadcaster.ActiveTask;
+            Assert.IsTrue(broadcaster.CheckGamersAnswer(task));
+            Assert.IsFalse(broadcaster.CheckGamersAnswer(task + task));
+        }
     }
 }
