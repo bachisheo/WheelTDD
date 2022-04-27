@@ -14,6 +14,9 @@ namespace WheelTdd
     {
         //todo вынести задания (задагаддные слова, вопросы) в отдельный класс
         private string[] Tasks = { "Облепиха", "Каравай", "Гаубица" };
+        //Табло с загаданным словом
+        public StringBuilder WordMask { get; private set; }
+        public const char SecretSign = '_';
 
         public string ActiveTask { get; private set; } = string.Empty;
         /// <summary>
@@ -33,6 +36,9 @@ namespace WheelTdd
         public object SelectNewTask()
         {
             ActiveTask = Tasks.First(x => x != ActiveTask);
+            WordMask = new StringBuilder();
+            for (int i = 0; i < ActiveTask.Length; i++)
+                WordMask.Append(SecretSign);
             return ActiveTask;
         }
 
