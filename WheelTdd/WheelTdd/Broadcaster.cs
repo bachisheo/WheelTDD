@@ -35,5 +35,15 @@ namespace WheelTdd
             ActiveTask = Tasks.First(x => x != ActiveTask);
             return ActiveTask;
         }
+
+        /// <summary>
+        /// Сравнение ответа игрока и загаданного слова
+        /// </summary>
+        /// <param name="task">Ответ игрока (слово или символ алфавита)</param>
+        /// <returns>Соотвествие ответа загаданному слову</returns>
+        public bool CheckGamersAnswer(string task)
+        {
+            return task.Equals(ActiveTask);
+        }
     }
 }
