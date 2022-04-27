@@ -21,14 +21,14 @@ namespace WheelTest
         }
 
         /// <summary>
-        /// Проверка запуска новой игры ведущим
+        /// Проверка выбора нового задания ведущим
         /// </summary>
         [TestMethod]
-        public void TestANewGameStarting()
+        public void TestSelectNewTask()
         {
             var broadcaster = new Broadcaster();
-            var oldGame = broadcaster.StartNewGame();
-            var newGame = broadcaster.StartNewGame();
+            var oldGame = broadcaster.SelectNewTask();
+            var newGame = broadcaster.SelectNewTask();
             Assert.AreNotEqual(oldGame, newGame);
         }
 

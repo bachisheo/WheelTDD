@@ -26,7 +26,11 @@ namespace WheelTdd
             return "Приветствую вас на игре \"Поле чудес\"!";
         }
 
-        public object StartNewGame()
+        /// <summary>
+        /// Выбрать другое задание (новое слово)
+        /// </summary>
+        /// <returns></returns>
+        public object SelectNewTask()
         {
             ActiveTask = Tasks.First(x => x != ActiveTask);
             return ActiveTask;
