@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32407.343
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WheelTdd", "WheelTdd\WheelTdd.csproj", "{420C298B-E875-4CEE-B2F2-FB675A637218}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WheelTest", "WheelTest\WheelTest.csproj", "{7D4BC5A4-CD86-4BCD-BEF3-15DCB6CA53E4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{420C298B-E875-4CEE-B2F2-FB675A637218}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{420C298B-E875-4CEE-B2F2-FB675A637218}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{420C298B-E875-4CEE-B2F2-FB675A637218}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{420C298B-E875-4CEE-B2F2-FB675A637218}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D4BC5A4-CD86-4BCD-BEF3-15DCB6CA53E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D4BC5A4-CD86-4BCD-BEF3-15DCB6CA53E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D4BC5A4-CD86-4BCD-BEF3-15DCB6CA53E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D4BC5A4-CD86-4BCD-BEF3-15DCB6CA53E4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0A9162AB-3ABE-4BB8-B90C-48911CDFB538}
+	EndGlobalSection
+EndGlobal
