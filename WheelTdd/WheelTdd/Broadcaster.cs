@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,7 +12,10 @@ namespace WheelTdd
     /// </summary>
     public class Broadcaster
     {
-        
+        //todo вынести задания (задагаддные слова, вопросы) в отдельный класс
+        private string[] Tasks = { "Облепиха", "Каравай", "Гаубица" };
+
+        public string ActiveTask { get; private set; } = string.Empty;
         /// <summary>
         /// Приветсвие игрока ведущим игры
         /// </summary>
@@ -20,6 +24,12 @@ namespace WheelTdd
         {
             //todo сделать вывод правил игры
             return "Приветствую вас на игре \"Поле чудес\"!";
+        }
+
+        public object StartNewGame()
+        {
+            ActiveTask = Tasks.First(x => x != ActiveTask);
+            return ActiveTask;
         }
     }
 }
