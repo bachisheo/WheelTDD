@@ -19,5 +19,18 @@ namespace WheelTest
             var broadcaster = new Broadcaster();
             Assert.AreNotEqual(broadcaster.SayGreeting(), string.Empty);
         }
+
+        /// <summary>
+        /// Проверка запуска новой игры ведущим
+        /// </summary>
+        [TestMethod]
+        public void TestANewGameStarting()
+        {
+            var broadcaster = new Broadcaster();
+            var oldGame = broadcaster.StartNewGame();
+            var newGame = broadcaster.StartNewGame();
+            Assert.AreNotEqual(oldGame, newGame);
+        }
+
     }
 }
