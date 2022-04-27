@@ -13,7 +13,7 @@ namespace WheelTdd
     public class Broadcaster
     {
         //todo вынести задания (задагаддные слова, вопросы) в отдельный класс
-        private string[] Tasks = { "Облепиха", "Каравай", "Гаубица" };
+        private string[] Tasks = { "ОБЛЕПИХА", "КАРАВАЙ", "ГАУБИЦА" };
         //Табло с загаданным словом
         public StringBuilder WordMask { get; private set; }
         public const char SecretSign = '_';
@@ -45,11 +45,37 @@ namespace WheelTdd
         /// <summary>
         /// Сравнение ответа игрока и загаданного слова
         /// </summary>
-        /// <param name="task">Ответ игрока (слово или символ алфавита)</param>
+        /// <param name="task">Ответ игрока (слово)</param>
         /// <returns>Соотвествие ответа загаданному слову</returns>
         public bool CheckGamersAnswer(string task)
         {
             return task.Equals(ActiveTask);
+        }  
+        /// <summary>
+        /// Сравнение ответа игрока и загаданного слова
+        /// </summary>
+        /// <param name="sign">Ответ игрока (символ алфавита)</param>
+        /// <returns>Соотвествие ответа загаданному слову</returns>
+        public bool CheckGamersAnswer(char sign)
+        {
+            if (!ActiveTask.Contains(sign)) return false;
+            OpenSigns(sign);
+            return true;
+        }
+
+        /// <summary>
+        /// Открыть на табло угаданные игроком буквы
+        /// </summary>
+        /// <param name="sign"></param>
+        private void OpenSigns(char sign)
+        {
+            for (int i = 0; i < ActiveTask.Length; i++)
+            {
+                if (ActiveTask[i] == sign)
+                {
+                    WordMask[i] = sign;
+                }
+            }
         }
     }
 }
