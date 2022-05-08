@@ -19,10 +19,10 @@ namespace WheelTdd
         }
         private User[] _users;
         //todo вынести задания (задагаддные слова, вопросы) в отдельный класс
-        private Quest[] _quests = new []
+        private Quest[] _quests = new[]
         {
-            new Quest("Что использовали в Китае для глажки белья вместо утюга", "СКОВОРОДА"),
-            new Quest("Ювелиры часто говорят, что бриллиантам необходимо это.", "ОДИНОЧЕСТВО")
+            new Quest("Что использовали в Китае для глажки белья вместо утюга?", "СКОВОРОДА"),
+            new Quest("Ювелиры часто говорят, что бриллиантам необходимо ... ?", "ОДИНОЧЕСТВО")
         };
 
         public Quest ActiveQuest { get; private set; }
@@ -67,7 +67,7 @@ namespace WheelTdd
         public int SpinWheel()
         {
             var rand = new Random(DateTime.Now.Second);
-            _lastSpin = rand.Next(32);
+            _lastSpin = rand.Next(32) + 1;
             return _lastSpin;
         }
         /// <summary>
@@ -81,11 +81,156 @@ namespace WheelTdd
             ActiveQuest = _quests.First(x => x != ActiveQuest);
             _game = new Game(ActiveQuest.Answer);
         }
+
+        public void StartGameCycle()
+        {
+
+            Console.WriteLine("Приветствую вас на игре \"Поле чудес\"!" + GetHelp());
+            string res = Console.ReadLine();
+            while (res != "-e")
+            {
+                switch (res)
+                {
+                    case "": break;
+
+                    case "-s":
+                        InitNewGame(InputUsers());
+                        StartWheel();
+                        break;
+                    case "-h":
+                        Console.WriteLine(GetHelp());
+                        break;
+                    case "-r":
+                        var sr = new StreamReader(@"GameRules.txt");
+                        Console.Write(sr.ReadToEnd());
+                        break;
+                    default:
+                        Console.WriteLine("Нет такой команды! Попробуйте снова. Для справки введите -h.");
+                        break;
+                }
+                res = Console.ReadLine();
+            }
+        }
+
+        private void SayQuestion()
+        {
+            Console.WriteLine("ВНИМАНИЕ, ВОПРОС!");
+            Console.WriteLine(ActiveQuest.Question);
+        }
+
+        private void ShowBoard()
+        {
+            StringBuilder sb = new StringBuilder("|");
+            foreach (var c in _game.Board.State)
+            {
+                sb.Append(c);
+                sb.Append("|");
+            }
+            Console.WriteLine(sb);
+        }
+        public void StartWheel()
+        {
+            SayQuestion();
+            bool needSpin = true;
+            while (true)
+            {
+                var user = _users[_activeUserId];
+                if (needSpin)
+                {
+                    ShowBoard();
+                    Console.WriteLine("" + SpinWheel() + " очков на барабане! Буква?");
+                }
+                var answer = Console.ReadLine();
+                if (isValid(answer))
+                {
+                    int score = InputUserAnswer(answer);
+                    if (score == 0)
+                    {
+                        Console.WriteLine("Неверный ответ!");
+                        if (_users.Length > 1)
+                        {
+                            user = _users[_activeUserId];
+                            Console.WriteLine("Ход переходит к игроку " + user.Name + "(" + user.Score + " очков).");
+                        }
+                        needSpin = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Верно! " + user.Name + ", вы заработали " + score + " очков (всего: " + user.Score + ").");
+                        needSpin = true;
+                        if (_game.IsAllOpen())
+                        {
+                            ShowBoard();
+                            Console.WriteLine("Игрок " + user.Name + " стал победителем!");
+                            Console.WriteLine(GetHelp());
+                            return;
+                        }
+                    }
+                }
+                else
+                {
+                    switch (answer)
+                    {
+                        case "": break;
+                        case "-h":
+                            Console.WriteLine("-e : закончить тур;\n" +
+                                              "-q : повторить вопрос;\n" +
+                                              "-p : вывести названные ранее буквы.\n");
+                            break;
+                        case "-q":
+                            SayQuestion();
+                            break;
+                        case "-p":
+                            Console.WriteLine();
+                            foreach (var c in _game.UsedLetters)
+                            {
+                                Console.Write(c);
+                                Console.Write(", ");
+                            }
+                            break;
+                        default:
+                            Console.WriteLine("Введите букву от 'А' до 'Я' или слово целиком. Для справки введите -h.");
+                            break;
+                    }
+                    needSpin = false;
+                }
+
+            }
+        }
+
+        private User[] InputUsers()
+        {
+
+            Console.WriteLine("Введите количество игроков:");
+            var s = Console.ReadLine();
+            int userCount = Int32.Parse(s);
+            var users = new User[userCount];
+
+            for (int i = 0; i < userCount; i++)
+            {
+                Console.WriteLine("Введите имя игрока #" + (i + 1) + ":");
+                users[i] = new User();
+                users[i].Name = Console.ReadLine();
+            }
+
+            return users;
+        }
+
+        bool isValid(string s)
+        {
+            foreach (var c in s)
+            {
+                if ((c < 'А' || c > 'Я') && (c < 'а' || c > 'я'))
+                    return false;
+            }
+            return true;
         }
 
     }
     public class User
     {
         public int Score { get; set; } = 0;
+        public string Name { get; set; } = String.Empty;
+
     }
 }

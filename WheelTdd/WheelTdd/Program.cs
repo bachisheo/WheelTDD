@@ -6,7 +6,8 @@ namespace WheelTdd
     {
         static void Main(string[] args)
         {
-         
+            GameLogic game = new GameLogic();
+            game.StartGameCycle();
         }
     }
 }

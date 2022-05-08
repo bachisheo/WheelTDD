@@ -10,7 +10,7 @@ namespace WheelTdd
     public class Board
     {
         //Табло с загаданным словом
-        public const char SecretSign = '_';
+        public const char SecretSign = '█';
         public string State => new string(_state);
         private char[] _state;
         private string _word;
