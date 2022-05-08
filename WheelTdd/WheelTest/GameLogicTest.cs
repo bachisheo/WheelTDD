@@ -17,13 +17,13 @@ namespace WheelTest
         public void TestGreeting()
         {
             var game = new GameLogic();
-            Assert.AreNotEqual(game.SayGreeting(), string.Empty);
+            Assert.AreNotEqual(game.GetHelp(), string.Empty);
         }
 
         /// <summary>
         /// Проверка выбора нового задания ведущим
         /// </summary>
-        [TestMethod]    
+        [TestMethod]
         public void TestSelectNewTask()
         {
             var game = new GameLogic();
@@ -38,14 +38,14 @@ namespace WheelTest
         [TestMethod]
         public void TestInputUserAnswer()
         {
-            var user = new User();
-            Assert.AreEqual(user.Score, 0);
+            User[] users = new[] { new User() };
             var game = new GameLogic();
-            game.StartNewGame(user);
+            game.InitNewGame(users);
             int wheelScore = game.SpinWheel();
             var answer = game.ActiveQuest.Answer;
             game.InputUserAnswer(answer);
-            Assert.AreEqual(wheelScore * answer.Length, user.Score);
+            Assert.AreEqual(wheelScore * answer.Length, users[0].Score);
+        }
         }
 
     }
