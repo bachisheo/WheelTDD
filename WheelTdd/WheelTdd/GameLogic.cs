@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,15 +11,19 @@ namespace WheelTdd
     /// <summary>
     /// Класс, реализующий функционал ведущего игры
     /// </summary>
-    public class Broadcaster
+    public class GameLogic
     {
+        private int _lastSpin = 1;
+        private User _currentUser;
+        private Game _currentGame;
         //todo вынести задания (задагаддные слова, вопросы) в отдельный класс
-        private string[] Tasks = { "ОБЛЕПИХА", "КАРАВАЙ", "ГАУБИЦА" };
-        //Табло с загаданным словом
-        public StringBuilder WordMask { get; private set; }
-        public const char SecretSign = '_';
+        private Quest[] _quests = new []
+        {
+            new Quest("Что использовали в Китае для глажки белья вместо утюга", "СКОВОРОДА"),
+            new Quest("Ювелиры часто говорят, что бриллиантам необходимо это.", "ОДИНОЧЕСТВО")
+        };
 
-        public string ActiveTask { get; private set; } = string.Empty;
+    public Quest ActiveQuest { get; private set; }
         /// <summary>
         /// Приветсвие игрока ведущим игры
         /// </summary>
@@ -33,49 +38,46 @@ namespace WheelTdd
         /// Выбрать другое задание (новое слово)
         /// </summary>
         /// <returns></returns>
-        public object SelectNewTask()
+        public Quest SelectNewQuest()
         {
-            ActiveTask = Tasks.First(x => x != ActiveTask);
-            WordMask = new StringBuilder();
-            for (int i = 0; i < ActiveTask.Length; i++)
-                WordMask.Append(SecretSign);
-            return ActiveTask;
+            ActiveQuest = _quests.First(x => x != ActiveQuest);
+            _currentGame = new Game(ActiveQuest.Answer);
+            return ActiveQuest;
         }
 
         /// <summary>
         /// Сравнение ответа игрока и загаданного слова
         /// </summary>
-        /// <param name="task">Ответ игрока (слово)</param>
-        /// <returns>Соотвествие ответа загаданному слову</returns>
-        public bool CheckGamersAnswer(string task)
+        /// <param name="task">Ответ игрока</param>
+        public void InputUserAnswer(string answer)
         {
-            return task.Equals(ActiveTask);
-        }  
-        /// <summary>
-        /// Сравнение ответа игрока и загаданного слова
-        /// </summary>
-        /// <param name="sign">Ответ игрока (символ алфавита)</param>
-        /// <returns>Соотвествие ответа загаданному слову</returns>
-        public bool CheckGamersAnswer(char sign)
-        {
-            if (!ActiveTask.Contains(sign)) return false;
-            OpenSigns(sign);
-            return true;
+            int score;
+            if (answer.Length == 1)
+                score = _currentGame.CheckUserAnswer(answer[0]);
+            else score = _currentGame.CheckUserAnswer(answer);
+            _currentUser.Score += score * _lastSpin;
         }
 
-        /// <summary>
-        /// Открыть на табло угаданные игроком буквы
-        /// </summary>
-        /// <param name="sign"></param>
-        private void OpenSigns(char sign)
+        public int SpinWheel()
         {
-            for (int i = 0; i < ActiveTask.Length; i++)
-            {
-                if (ActiveTask[i] == sign)
-                {
-                    WordMask[i] = sign;
-                }
-            }
+            var rand = new Random(DateTime.Now.Second);
+            _lastSpin = rand.Next(32);
+            return _lastSpin;
         }
+        /// <summary>
+        /// Выбрать другое задание (новое слово)
+        /// </summary>
+        /// <returns></returns>
+        public void StartNewGame(User user)
+        {
+            _currentUser = user;
+            ActiveQuest = _quests.First(x => x != ActiveQuest);
+            _currentGame = new Game(ActiveQuest.Answer);
+        }
+
+    }
+    public class User
+    {
+        public int Score { get; set; } = 0;
     }
 }
