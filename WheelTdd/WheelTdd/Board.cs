@@ -26,29 +26,35 @@ namespace WheelTdd
         /// Метод, открывающий букву в слове.
         /// </summary>
         /// <param name="c">Открываемая буква</param>
-        public void OpenLetter(char c)
+        /// <returns>Количество открытых букв</returns>
+        public int OpenLetter(char c)
         {
+            int countLetter = 0;
             for (int i = 0; i < _word.Length; i++)
             {
-                if (_word[i] == c)
+                if (_word[i] == c && _state[i] == SecretSign)
                 {
+                    countLetter++;
                     _state[i] = _word[i];
                 }
             }
+            return countLetter;
         }
         /// <summary>
         /// Проверка метода, открывающего угаданное слово целиком.
         /// </summary>
-        public void OpenWord()
+        public int OpenWord()
         {
+            int countLetter = 0;
             for (int i = 0; i < _word.Length; i++)
             {
                 if (_state[i] == SecretSign)
                 {
                     _state[i] = _word[i];
+                    countLetter++;
                 }
             }
+            return countLetter;
         }
- 
     }
 }
