@@ -85,7 +85,7 @@ namespace WheelTest
             }
         }
 
-        private Dictionary<char, int> PreCountWordStructure(string word)
+        public static Dictionary<char, int> PreCountWordStructure(string word)
         {
             var letters = new Dictionary<char, int>();
             for (int i = 0; i < word.Length; i++)

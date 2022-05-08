@@ -41,11 +41,11 @@ namespace WheelTest
         {
             foreach (var task in GetQuests())
             {
-                var game = new Game(task.Answer);
                 for (char c = 'А'; c <= 'Я'; c++)
                 {
+                    var game = new Game(task.Answer);
                     int openLetters = game.CheckUserAnswer(c);
-                    Assert.AreEqual(game.CheckUserAnswer(task.Answer), openLetters);
+                    Assert.AreEqual(game.CheckUserAnswer(task.Answer), task.Answer.Length - openLetters);
                 }
             }
         }
