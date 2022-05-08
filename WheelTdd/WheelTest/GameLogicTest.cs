@@ -46,9 +46,24 @@ namespace WheelTest
             game.InputUserAnswer(answer);
             Assert.AreEqual(wheelScore * answer.Length, users[0].Score);
         }
+
+        /// <summary>
+        /// Проверка смены игрока при неверном ответе
+        /// </summary>
+        [TestMethod]
+        public void TestInputUserWrongAnswer()
+        {
+            User[] users = new[] { new User(), new User() };
+            var game = new GameLogic();
+            game.InitNewGame(users);
+            Assert.AreEqual(users[0], game.ActiveUser);
+            game.InputUserAnswer(game.ActiveQuest.Answer + "wrong");
+            Assert.AreEqual(users[1], game.ActiveUser);
+            game.InputUserAnswer(game.ActiveQuest.Answer);
+            Assert.AreEqual(users[1], game.ActiveUser);
         }
 
     }
 
-   
+
 }
