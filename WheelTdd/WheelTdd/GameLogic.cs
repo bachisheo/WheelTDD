@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Reflection.Metadata;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace WheelTdd
 {
@@ -14,8 +11,13 @@ namespace WheelTdd
     public class GameLogic
     {
         private int _lastSpin = 1;
-        private User _currentUser;
-        private Game _currentGame;
+        private int _activeUserId;
+        private Game _game;
+        public User ActiveUser
+        {
+            get => _users[_activeUserId];
+        }
+        private User[] _users;
         //todo вынести задания (задагаддные слова, вопросы) в отдельный класс
         private Quest[] _quests = new []
         {
@@ -23,17 +25,15 @@ namespace WheelTdd
             new Quest("Ювелиры часто говорят, что бриллиантам необходимо это.", "ОДИНОЧЕСТВО")
         };
 
-    public Quest ActiveQuest { get; private set; }
-        /// <summary>
-        /// Приветсвие игрока ведущим игры
-        /// </summary>
-        /// <returns>Текст приветствия</returns>
-        public string SayGreeting()
-        {
-            //todo сделать вывод правил игры
-            return "Приветствую вас на игре \"Поле чудес\"!";
-        }
+        public Quest ActiveQuest { get; private set; }
 
+        public string GetHelp()
+        {
+            return "\n -s : начать игру;" +
+                   "\n -h : данная справка;" +
+                   "\n -r : правила игры;" +
+                   "\n -e : выйти из игры.";
+        }
         /// <summary>
         /// Выбрать другое задание (новое слово)
         /// </summary>
@@ -41,7 +41,7 @@ namespace WheelTdd
         public Quest SelectNewQuest()
         {
             ActiveQuest = _quests.First(x => x != ActiveQuest);
-            _currentGame = new Game(ActiveQuest.Answer);
+            _game = new Game(ActiveQuest.Answer);
             return ActiveQuest;
         }
 
@@ -49,13 +49,19 @@ namespace WheelTdd
         /// Сравнение ответа игрока и загаданного слова
         /// </summary>
         /// <param name="task">Ответ игрока</param>
-        public void InputUserAnswer(string answer)
+        public int InputUserAnswer(string answer)
         {
+            answer = answer.ToUpperInvariant();
             int score;
             if (answer.Length == 1)
-                score = _currentGame.CheckUserAnswer(answer[0]);
-            else score = _currentGame.CheckUserAnswer(answer);
-            _currentUser.Score += score * _lastSpin;
+                score = _game.CheckUserAnswer(answer[0]);
+            else score = _game.CheckUserAnswer(answer);
+            score *= _lastSpin;
+            if (score > 0)
+                _users[_activeUserId].Score += score;
+            else
+                _activeUserId = (_activeUserId + 1) % _users.Length;
+            return score;
         }
 
         public int SpinWheel()
@@ -68,11 +74,13 @@ namespace WheelTdd
         /// Выбрать другое задание (новое слово)
         /// </summary>
         /// <returns></returns>
-        public void StartNewGame(User user)
+        public void InitNewGame(User[] users)
         {
-            _currentUser = user;
+            _users = users;
+            _activeUserId = 0;
             ActiveQuest = _quests.First(x => x != ActiveQuest);
-            _currentGame = new Game(ActiveQuest.Answer);
+            _game = new Game(ActiveQuest.Answer);
+        }
         }
 
     }
