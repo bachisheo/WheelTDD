@@ -49,5 +49,22 @@ namespace WheelTest
                 }
             }
         }
+
+        [TestMethod]
+        public void TestAllOpenedMethod()
+        {
+            foreach (var task in GetQuests())
+            {
+                for (char c = 'А'; c <= 'Я'; c++)
+                {
+                    var game = new Game(task.Answer);
+                    Assert.IsFalse(game.IsAllOpen());
+                    if(game.CheckUserAnswer(c) < task.Answer.Length)
+                        Assert.IsFalse(game.IsAllOpen());
+                    game.CheckUserAnswer(task.Answer);
+                    Assert.IsTrue(game.IsAllOpen());
+                }
+            }
+        }
     }
 }
